@@ -35,4 +35,4 @@ A minimal API utilizing **RestExceptions** is included in the project files as a
 
 ## Disclaimer
 
-This project was generated using [Stratis-Dermanoutsos/dotnet-empty-solution](https://github.com/Stratis-Dermanoutsos/dotnet-empty-solution).
+This project was generated using [stratisd-labs/dotnet-empty-solution](https://github.com/stratisd-labs/dotnet-empty-solution).
