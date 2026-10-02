@@ -1,6 +1,6 @@
 # RestExceptions
 
-[![CI](https://github.com/Stratis-OSS/RestExceptions/workflows/CI/badge.svg)](https://github.com/Stratis-OSS/RestExceptions/actions?query=workflow%3ACI)
+[![CI](https://github.com/stratisd-labs/rest-exceptions-dotnet/workflows/CI/badge.svg)](https://github.com/stratisd-labs/rest-exceptions-dotnet/actions?query=workflow%3ACI)
 
 Extensible Web API middleware that maps all exceptions to standardized [RFC7807](https://www.rfc-editor.org/rfc/rfc7807.html)-compliant HTTP responses.
 
@@ -12,7 +12,7 @@ Extensible Web API middleware that maps all exceptions to standardized [RFC7807]
 
 ## Documentation
 
-You can read the documentation for **RestExceptions** on [GitHub wiki](https://github.com/Stratis-OSS/RestExceptions/wiki).
+You can read the documentation for **RestExceptions** on [GitHub wiki](https://github.com/stratisd-labs/rest-exceptions-dotnet/wiki).
 
 ## Example response format (404)
 
