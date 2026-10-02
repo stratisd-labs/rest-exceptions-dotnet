@@ -10,8 +10,8 @@
     <Copyright>Copyright © Stratis Dermanoutsos 2026</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
 
-    <PackageProjectUrl>https://github.com/Stratis-OSS/RestExceptions</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Stratis-OSS/RestExceptions</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/stratisd-labs/rest-exceptions-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/stratisd-labs/rest-exceptions-dotnet</RepositoryUrl>
 
     <Description>Extensible Web API middleware that maps all exceptions to standardized RFC7807-compliant HTTP responses.</Description>
     <PackageTags>open-source http oss rest errors csharp dotnet exceptions problem-details rfc7807</PackageTags>
