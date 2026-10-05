@@ -1,6 +1,7 @@
 ﻿<Solution>
   <Folder Name="/examples/">
     <Project Path="examples\RestExceptions.Demo\RestExceptions.Demo.csproj" />
+    <Project Path="examples\RestExceptions.FluentValidation.Demo\RestExceptions.FluentValidation.Demo.csproj" />
   </Folder>
   <Folder Name="/solution/">
     <File Path=".editorconfig" />
@@ -23,6 +24,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/RestExceptions.IntegrationTests/RestExceptions.IntegrationTests.csproj" />
     <Project Path="tests/RestExceptions.UnitTests/RestExceptions.UnitTests.csproj" />
+    <Project Path="tests/RestExceptions.FluentValidation.IntegrationTests/RestExceptions.FluentValidation.IntegrationTests.csproj" />
     <Project Path="tests/RestExceptions.FluentValidation.UnitTests/RestExceptions.FluentValidation.UnitTests.csproj" />
   </Folder>
 </Solution>

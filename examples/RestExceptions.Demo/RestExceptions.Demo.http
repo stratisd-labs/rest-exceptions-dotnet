@@ -194,21 +194,3 @@ GET {{Demo_HostAddress}}/error/0
 Accept: application/json
 
 ###
-
-# 400 - Bad Request (FluentValidation's default error code)
-POST {{Demo_HostAddress}}/users
-Content-Type: application/json
-Accept: application/json
-
-{ "name": "" }
-
-###
-
-# 409 - Conflict (.WithErrorCode("409"))
-POST {{Demo_HostAddress}}/users
-Content-Type: application/json
-Accept: application/json
-
-{ "name": "taken" }
-
-###

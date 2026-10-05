@@ -86,7 +86,10 @@ Without `AddFluentValidation()`, a `ValidationException` is returned as 500 Inte
 
 ## Examples and sample project
 
-A minimal API utilizing **RestExceptions** is included in the project files as an example.
+Minimal APIs are included in the project files as examples:
+
+- `examples/RestExceptions.Demo`: **RestExceptions** on its own.
+- `examples/RestExceptions.FluentValidation.Demo`: **RestExceptions** with **RestExceptions.FluentValidation**, covering each error code form (see its `.http` file).
 
 ## Disclaimer
 

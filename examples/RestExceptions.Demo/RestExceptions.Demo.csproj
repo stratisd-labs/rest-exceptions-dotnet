@@ -2,7 +2,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\RestExceptions\RestExceptions.csproj" />
-        <ProjectReference Include="..\..\src\RestExceptions.FluentValidation\RestExceptions.FluentValidation.csproj" />
     </ItemGroup>
 
 </Project>
