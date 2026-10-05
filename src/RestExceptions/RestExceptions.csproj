@@ -2,7 +2,7 @@
   <PropertyGroup>
     <PackageId>RestExceptions</PackageId>
     <Title>RestExceptions</Title>
-    <Version>10.0.0</Version>
+    <Version>10.1.0</Version>
 
     <Authors>Stratis-Dermanoutsos</Authors>
 
@@ -15,7 +15,8 @@
     <Description>Extensible Web API middleware that maps all exceptions to standardized RFC7807-compliant HTTP responses.</Description>
     <PackageTags>open-source http oss rest errors csharp dotnet exceptions problem-details rfc7807</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>* Upgraded to .NET 10 and C# 14.
+    <PackageReleaseNotes>* Added IRestExceptionMapper, to map additional exception types, registered through AddRestExceptions(options => options.AddMapper&lt;T&gt;()).
+* Added RestExceptionFactory, to create a RestException from an HttpStatusCode.
     </PackageReleaseNotes>
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

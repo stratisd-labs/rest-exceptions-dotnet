@@ -19,6 +19,25 @@ public static class ServiceCollectionExtensions
     /// <returns>The newly configured <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddRestExceptions(this IServiceCollection services)
     {
+        return services.AddRestExceptions(_ => { });
+    }
+
+    /// <summary>
+    /// Registers the RestExceptions services in the DI container and configures them.
+    /// </summary>
+    /// <remarks>
+    /// See <see cref="AddRestExceptions(IServiceCollection)"/> for the middleware that must be registered as well.
+    /// </remarks>
+    /// <param name="services">The service collection to add the services to.</param>
+    /// <param name="configure">Configures RestExceptions, e.g. registers additional <see cref="IRestExceptionMapper"/>s.</param>
+    /// <returns>The newly configured <see cref="IServiceCollection"/>.</returns>
+    /// <code>
+    /// builder.Services.AddRestExceptions(options => options.AddMapper&lt;CustomRestExceptionMapper&gt;());
+    /// </code>
+    public static IServiceCollection AddRestExceptions(
+        this IServiceCollection services,
+        Action<RestExceptionsBuilder> configure)
+    {
         services.AddProblemDetails(options => options.CustomizeProblemDetails = context =>
             {
                 context.ProblemDetails.Instance = context.HttpContext.Request.Path;
@@ -28,6 +47,8 @@ public static class ServiceCollectionExtensions
                     context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity.Id);
             });
         services.AddExceptionHandler<RestExceptionHandler>();
+
+        configure(new RestExceptionsBuilder(services));
 
         return services;
     }

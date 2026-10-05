@@ -8,6 +8,32 @@ namespace RestExceptions;
 public static class ExceptionExtensions
 {
     /// <summary>
+    /// Maps a generic <see cref="Exception"/> to a specific <see cref="RestException"/>,
+    /// giving the provided <paramref name="mappers"/> precedence over the built-in mapping.
+    /// </summary>
+    /// <param name="exception">The exception to map.</param>
+    /// <param name="mappers">The mappers to try, in order. The first non-null result wins.</param>
+    /// <returns>A <see cref="RestException"/> that corresponds to the provided exception.</returns>
+    public static RestException MapToRestException(this Exception exception, IEnumerable<IRestExceptionMapper> mappers)
+    {
+        if (exception is RestException restException)
+        {
+            return restException;
+        }
+
+        foreach (var mapper in mappers)
+        {
+            var mapped = mapper.Map(exception);
+            if (mapped is not null)
+            {
+                return mapped;
+            }
+        }
+
+        return exception.MapToRestException();
+    }
+
+    /// <summary>
     /// Maps a generic <see cref="Exception"/> to a specific <see cref="RestException"/>.
     /// </summary>
     /// <param name="exception">The exception to map.</param>

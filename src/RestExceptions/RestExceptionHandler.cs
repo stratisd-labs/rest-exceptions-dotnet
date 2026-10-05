@@ -6,17 +6,27 @@ namespace RestExceptions;
 
 public class RestExceptionHandler(
     IProblemDetailsService problemDetailsService,
+    IEnumerable<IRestExceptionMapper> mappers,
     IRestExceptionProblemDetailsBuilder? problemDetailsBuilder = null)
     : IExceptionHandler
 {
+    private readonly IRestExceptionMapper[] _mappers = mappers.ToArray();
     private readonly IRestExceptionProblemDetailsBuilder _problemDetailsBuilder =
         problemDetailsBuilder ?? new DefaultRestExceptionProblemDetailsBuilder();
+
+    public RestExceptionHandler(
+        IProblemDetailsService problemDetailsService,
+        IRestExceptionProblemDetailsBuilder? problemDetailsBuilder = null)
+        : this(problemDetailsService, [], problemDetailsBuilder)
+    {
+    }
+
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
         Exception exception,
         CancellationToken cancellationToken = default)
     {
-        var restException = exception.MapToRestException();
+        var restException = exception.MapToRestException(_mappers);
 
         var problemDetails = _problemDetailsBuilder.Build(httpContext, restException);
 
