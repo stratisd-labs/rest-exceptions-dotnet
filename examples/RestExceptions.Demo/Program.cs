@@ -1,5 +1,8 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using RestExceptions;
+using RestExceptions.Demo.Validators;
+using RestExceptions.FluentValidation;
 // using RestExceptions.Demo.Builders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Uncomment the following line to use a custom implementation of IRestExceptionProblemDetailsBuilder.
 // builder.Services.AddSingleton<IRestExceptionProblemDetailsBuilder, CustomExampleRestExceptionProblemDetailsBuilder>();
 
-builder.Services.AddRestExceptions();
+// AddFluentValidation() maps FluentValidation's ValidationException, using each rule's ErrorCode as the status code.
+builder.Services.AddRestExceptions(options => options.AddFluentValidation());
 
 var app = builder.Build();
 
@@ -57,6 +61,12 @@ app.MapGet("error/{statusCode:int}", ([FromRoute] int statusCode) =>
         511 => new NetworkAuthenticationRequiredRestException(),
         _ => new Exception()
     };
+});
+
+app.MapPost("users", ([FromBody] CreateUserRequest request) =>
+{
+    new CreateUserRequestValidator().ValidateAndThrow(request);
+    return Results.Created();
 });
 
 //! Important

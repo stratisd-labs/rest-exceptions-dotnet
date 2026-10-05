@@ -18,8 +18,11 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src\RestExceptions\RestExceptions.csproj" />
+    <Project Path="src\RestExceptions.FluentValidation\RestExceptions.FluentValidation.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/RestExceptions.IntegrationTests/RestExceptions.IntegrationTests.csproj" />
+    <Project Path="tests/RestExceptions.UnitTests/RestExceptions.UnitTests.csproj" />
+    <Project Path="tests/RestExceptions.FluentValidation.UnitTests/RestExceptions.FluentValidation.UnitTests.csproj" />
   </Folder>
 </Solution>
