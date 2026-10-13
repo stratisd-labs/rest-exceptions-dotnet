@@ -17,6 +17,12 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>* Added IRestExceptionMapper, to map additional exception types, registered through AddRestExceptions(options => options.AddMapper&lt;T&gt;()).
 * Added RestExceptionFactory, to create a RestException from an HttpStatusCode.
+* Exceptions mapped to 5xx are now logged, since .NET 10 no longer logs exceptions handled by an IExceptionHandler.
+* Fixed a crash when a RestException's extensions contained a "method" or "requestId" key.
+* Fixed the default message of FailedDependencyRestException.
+* Included XML documentation in the package.
+* Breaking: InvalidOperationException is now mapped to 500 Internal Server Error, instead of 405 Method Not Allowed.
+* Breaking: StringExtensions.ToKebabCase is now internal.
     </PackageReleaseNotes>
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
