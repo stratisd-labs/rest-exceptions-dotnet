@@ -63,9 +63,8 @@ public static class ExceptionExtensions
                 or TimeZoneNotFoundException
                 or VersionNotFoundException => new NotFoundRestException(exception.Message, extensions),
             // 400 - Bad Request
+            // Includes ArgumentNullException and ArgumentOutOfRangeException
             ArgumentException
-                or ArgumentNullException
-                or ArgumentOutOfRangeException
                 or BadHttpRequestException
                 or ConstraintException => new BadRequestRestException(exception.Message, extensions),
             // 403 - Forbidden

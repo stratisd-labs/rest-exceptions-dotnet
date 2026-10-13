@@ -58,4 +58,19 @@ public class ExceptionExtensionsTests
         result.ShouldBeOfType<InternalServerErrorRestException>();
     }
 
+    [Theory]
+    [InlineData(typeof(ArgumentException))]
+    [InlineData(typeof(ArgumentNullException))]
+    [InlineData(typeof(ArgumentOutOfRangeException))]
+    public void MapToRestException_Maps_ArgumentException_And_Inheritors_To_Bad_Request(Type exceptionType)
+    {
+        // Arrange
+        var exception = (Exception)Activator.CreateInstance(exceptionType)!;
+
+        // Act
+        var result = exception.MapToRestException();
+
+        // Assert
+        result.ShouldBeOfType<BadRequestRestException>();
+    }
 }
