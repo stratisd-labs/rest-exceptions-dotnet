@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Shouldly"/>
+    <PackageReference Include="TUnit"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Shouldly"/>
+    <Using Include="System.Net"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\RestExceptions\RestExceptions.csproj" />
+  </ItemGroup>
+
+</Project>

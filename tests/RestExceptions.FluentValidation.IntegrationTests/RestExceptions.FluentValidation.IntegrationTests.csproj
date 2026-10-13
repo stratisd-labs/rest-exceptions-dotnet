@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing"/>
+    <PackageReference Include="Shouldly"/>
+    <PackageReference Include="TUnit"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Shouldly"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\examples\RestExceptions.FluentValidation.Demo\RestExceptions.FluentValidation.Demo.csproj" />
+    <ProjectReference Include="..\..\src\RestExceptions.FluentValidation\RestExceptions.FluentValidation.csproj" />
+  </ItemGroup>
+
+</Project>

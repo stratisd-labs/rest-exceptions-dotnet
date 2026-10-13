@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>RestExceptions.FluentValidation</PackageId>
+    <Title>RestExceptions.FluentValidation</Title>
+    <Version>10.1.0</Version>
+
+    <Authors>Stratis-Dermanoutsos</Authors>
+
+    <Copyright>Copyright © Stratis Dermanoutsos 2026</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+
+    <PackageProjectUrl>https://github.com/stratisd-labs/rest-exceptions-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/stratisd-labs/rest-exceptions-dotnet</RepositoryUrl>
+
+    <Description>FluentValidation integration for RestExceptions. Maps ValidationException to RFC7807-compliant HTTP responses, picking the status code from each rule's ErrorCode.</Description>
+    <PackageTags>open-source http oss rest errors csharp dotnet exceptions problem-details rfc7807 fluentvalidation validation</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>* Initial release. Maps FluentValidation's ValidationException, with the status code taken from ErrorCode.
+    </PackageReleaseNotes>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Not every public member is documented yet -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RestExceptions\RestExceptions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../LICENSE" Pack="true" PackagePath="/"/>
+    <None Include="../../README.md" Pack="true" PackagePath="/"/>
+  </ItemGroup>
+</Project>

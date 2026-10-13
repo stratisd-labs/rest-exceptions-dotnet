@@ -1,25 +1,32 @@
 ﻿<Solution>
   <Folder Name="/examples/">
     <Project Path="examples\RestExceptions.Demo\RestExceptions.Demo.csproj" />
+    <Project Path="examples\RestExceptions.FluentValidation.Demo\RestExceptions.FluentValidation.Demo.csproj" />
   </Folder>
   <Folder Name="/solution/">
     <File Path=".editorconfig" />
     <File Path="build-pack.sh" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
   </Folder>
   <Folder Name="/solution/git/">
     <File Path=".gitignore" />
     <File Path=".github/CODEOWNERS" />
     <File Path="README.md" />
+    <File Path="RELEASE_NOTES.md" />
   </Folder>
   <Folder Name="/solution/git/workflows/">
     <File Path=".github/workflows/CI.yml" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src\RestExceptions\RestExceptions.csproj" />
+    <Project Path="src\RestExceptions.FluentValidation\RestExceptions.FluentValidation.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/RestExceptions.IntegrationTests/RestExceptions.IntegrationTests.csproj" />
+    <Project Path="tests/RestExceptions.UnitTests/RestExceptions.UnitTests.csproj" />
+    <Project Path="tests/RestExceptions.FluentValidation.IntegrationTests/RestExceptions.FluentValidation.IntegrationTests.csproj" />
+    <Project Path="tests/RestExceptions.FluentValidation.UnitTests/RestExceptions.FluentValidation.UnitTests.csproj" />
   </Folder>
 </Solution>

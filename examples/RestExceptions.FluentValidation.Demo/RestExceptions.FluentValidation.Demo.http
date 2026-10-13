@@ -1,0 +1,55 @@
+@Demo_HostAddress = http://localhost:5093
+
+# 201 - Created
+POST {{Demo_HostAddress}}/users
+Content-Type: application/json
+Accept: application/json
+
+{ "name": "john", "email": "john@example.com" }
+
+###
+
+# 400 - Bad Request (FluentValidation's default error codes)
+POST {{Demo_HostAddress}}/users
+Content-Type: application/json
+Accept: application/json
+
+{ "name": "", "email": "not-an-email" }
+
+###
+
+# 409 - Conflict (.WithErrorCode("409"))
+POST {{Demo_HostAddress}}/users
+Content-Type: application/json
+Accept: application/json
+
+{ "name": "taken", "email": "john@example.com" }
+
+###
+
+# 422 - Unprocessable Content (.WithErrorCode("UnprocessableContent"))
+POST {{Demo_HostAddress}}/users
+Content-Type: application/json
+Accept: application/json
+
+{ "name": "admin", "email": "john@example.com" }
+
+###
+
+# 403 - Forbidden (.WithErrorCode(nameof(ForbiddenRestException)))
+POST {{Demo_HostAddress}}/users
+Content-Type: application/json
+Accept: application/json
+
+{ "name": "john", "email": "john@blocked.example" }
+
+###
+
+# 400 - Bad Request (409 and 403 disagree)
+POST {{Demo_HostAddress}}/users
+Content-Type: application/json
+Accept: application/json
+
+{ "name": "taken", "email": "john@blocked.example" }
+
+###
