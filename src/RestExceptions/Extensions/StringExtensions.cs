@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace RestExceptions;
 
-public static partial class StringExtensions
+internal static partial class StringExtensions
 {
     /// <summary>
     /// Converts a string to kebab-case.
@@ -12,7 +12,7 @@ public static partial class StringExtensions
     /// <example>
     /// "This is a test" becomes "this-is-a-test".
     /// </example>
-    public static string ToKebabCase(this string str)
+    internal static string ToKebabCase(this string str)
     {
         return string.IsNullOrEmpty(str)
             ? str
