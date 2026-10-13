@@ -8,11 +8,12 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace RestExceptions.FluentValidation.IntegrationTests;
 
-public class UsersTests(ApiFactory factory) : IClassFixture<ApiFactory>
+[ClassDataSource<ApiFactory>(Shared = SharedType.PerClass)]
+public class UsersTests(ApiFactory factory)
 {
     private readonly HttpClient _client = factory.CreateHttpsClient();
 
-    [Fact]
+    [Test]
     public async Task Valid_Request_Is_Created()
     {
         // Act
@@ -22,11 +23,11 @@ public class UsersTests(ApiFactory factory) : IClassFixture<ApiFactory>
         response.StatusCode.ShouldBe(HttpStatusCode.Created);
     }
 
-    [Theory]
-    [InlineData("", "john@example.com", HttpStatusCode.BadRequest, "Bad Request")]
-    [InlineData("taken", "john@example.com", HttpStatusCode.Conflict, "Conflict")]
-    [InlineData("admin", "john@example.com", HttpStatusCode.UnprocessableEntity, "Unprocessable Content")]
-    [InlineData("john", "john@blocked.example", HttpStatusCode.Forbidden, "Forbidden")]
+    [Test]
+    [Arguments("", "john@example.com", HttpStatusCode.BadRequest, "Bad Request")]
+    [Arguments("taken", "john@example.com", HttpStatusCode.Conflict, "Conflict")]
+    [Arguments("admin", "john@example.com", HttpStatusCode.UnprocessableEntity, "Unprocessable Content")]
+    [Arguments("john", "john@blocked.example", HttpStatusCode.Forbidden, "Forbidden")]
     public async Task Error_Code_Sets_Status_Code(
         string name,
         string email,
@@ -42,7 +43,7 @@ public class UsersTests(ApiFactory factory) : IClassFixture<ApiFactory>
         problemDetails.Title.ShouldBe(expectedTitle);
     }
 
-    [Fact]
+    [Test]
     public async Task Single_Failure_Is_The_Detail_And_In_Errors()
     {
         // Act
@@ -53,7 +54,7 @@ public class UsersTests(ApiFactory factory) : IClassFixture<ApiFactory>
         Errors(problemDetails)["Name"].ShouldBe(["A user named 'taken' already exists."]);
     }
 
-    [Fact]
+    [Test]
     public async Task Disagreeing_Error_Codes_Are_Bad_Request_With_All_Errors()
     {
         // Act
@@ -67,7 +68,7 @@ public class UsersTests(ApiFactory factory) : IClassFixture<ApiFactory>
         errors["Email"].ShouldBe(["Emails from 'blocked.example' are not allowed."]);
     }
 
-    [Fact]
+    [Test]
     public async Task Failures_Of_The_Same_Property_Are_Grouped()
     {
         // Act
@@ -78,7 +79,7 @@ public class UsersTests(ApiFactory factory) : IClassFixture<ApiFactory>
         Errors(problemDetails)["Email"].Length.ShouldBe(2);
     }
 
-    [Fact]
+    [Test]
     public async Task Without_FluentValidation_Mapper_Is_Internal_Server_Error()
     {
         // Arrange

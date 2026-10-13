@@ -7,7 +7,7 @@ namespace RestExceptions.UnitTests;
 
 public class RestExceptionHandlerTests
 {
-    [Fact]
+    [Test]
     public async Task Without_Mappers_Uses_Built_In_Mapping()
     {
         // Arrange
@@ -23,7 +23,7 @@ public class RestExceptionHandlerTests
         result.ShouldBe(StatusCodes.Status404NotFound);
     }
 
-    [Fact]
+    [Test]
     public async Task Registered_Mapper_Takes_Precedence_Over_Built_In_Mapping()
     {
         // Arrange
@@ -39,7 +39,7 @@ public class RestExceptionHandlerTests
         result.ShouldBe(StatusCodes.Status410Gone);
     }
 
-    [Fact]
+    [Test]
     public void AddMapper_Registers_Same_Mapper_Once()
     {
         // Arrange
@@ -56,7 +56,7 @@ public class RestExceptionHandlerTests
         result.Count().ShouldBe(1);
     }
 
-    [Fact]
+    [Test]
     public async Task Constructor_Without_Mappers_Remains_Available()
     {
         // Arrange
@@ -74,7 +74,7 @@ public class RestExceptionHandlerTests
         httpContext.Response.StatusCode.ShouldBe(StatusCodes.Status404NotFound);
     }
 
-    [Fact]
+    [Test]
     public async Task Extensions_With_Reserved_Keys_Do_Not_Break_The_Response()
     {
         // Arrange
@@ -95,9 +95,9 @@ public class RestExceptionHandlerTests
         result.ShouldBe(StatusCodes.Status409Conflict);
     }
 
-    [Theory]
-    [InlineData(typeof(Exception), true)]
-    [InlineData(typeof(KeyNotFoundException), false)]
+    [Test]
+    [Arguments(typeof(Exception), true)]
+    [Arguments(typeof(KeyNotFoundException), false)]
     public async Task Logs_Only_Server_Errors(Type exceptionType, bool expected)
     {
         // Arrange

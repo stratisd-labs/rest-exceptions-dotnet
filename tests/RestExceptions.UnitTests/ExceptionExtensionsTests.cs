@@ -2,7 +2,7 @@ namespace RestExceptions.UnitTests;
 
 public class ExceptionExtensionsTests
 {
-    [Fact]
+    [Test]
     public void MapToRestException_Uses_First_Mapper_That_Maps()
     {
         // Arrange
@@ -20,7 +20,7 @@ public class ExceptionExtensionsTests
         result.ShouldBeOfType<ConflictRestException>();
     }
 
-    [Fact]
+    [Test]
     public void MapToRestException_Falls_Back_To_Built_In_Mapping()
     {
         // Arrange
@@ -33,7 +33,7 @@ public class ExceptionExtensionsTests
         result.ShouldBeOfType<NotFoundRestException>();
     }
 
-    [Fact]
+    [Test]
     public void MapToRestException_Does_Not_Pass_RestException_To_Mappers()
     {
         // Arrange
@@ -48,7 +48,7 @@ public class ExceptionExtensionsTests
         mapper.Calls.ShouldBe(0);
     }
 
-    [Fact]
+    [Test]
     public void MapToRestException_Maps_InvalidOperationException_To_Internal_Server_Error()
     {
         // Act
@@ -58,10 +58,10 @@ public class ExceptionExtensionsTests
         result.ShouldBeOfType<InternalServerErrorRestException>();
     }
 
-    [Theory]
-    [InlineData(typeof(ArgumentException))]
-    [InlineData(typeof(ArgumentNullException))]
-    [InlineData(typeof(ArgumentOutOfRangeException))]
+    [Test]
+    [Arguments(typeof(ArgumentException))]
+    [Arguments(typeof(ArgumentNullException))]
+    [Arguments(typeof(ArgumentOutOfRangeException))]
     public void MapToRestException_Maps_ArgumentException_And_Inheritors_To_Bad_Request(Type exceptionType)
     {
         // Arrange

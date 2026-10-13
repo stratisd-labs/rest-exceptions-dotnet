@@ -2,7 +2,7 @@ namespace RestExceptions.UnitTests;
 
 public class RestExceptionFactoryTests
 {
-    [Fact]
+    [Test]
     public void Supports_Every_RestException_Type()
     {
         // Arrange
@@ -18,7 +18,7 @@ public class RestExceptionFactoryTests
         result.Count.ShouldBe(restExceptionTypes.Count);
     }
 
-    [Fact]
+    [Test]
     public void Create_Returns_RestException_With_Requested_Status_Code()
     {
         foreach (var statusCode in RestExceptionFactory.SupportedStatusCodes)
@@ -32,7 +32,7 @@ public class RestExceptionFactoryTests
         }
     }
 
-    [Fact]
+    [Test]
     public void Create_Passes_Message_And_Extensions()
     {
         // Arrange
@@ -47,7 +47,7 @@ public class RestExceptionFactoryTests
         result.Extensions.ShouldBe(extensions);
     }
 
-    [Fact]
+    [Test]
     public void Create_Uses_Default_Message_When_Message_Is_Null()
     {
         // Act
@@ -58,10 +58,10 @@ public class RestExceptionFactoryTests
         result.Message.ShouldBe(ConflictRestException.DefaultMessage);
     }
 
-    [Theory]
-    [InlineData(HttpStatusCode.OK)]
-    [InlineData((HttpStatusCode)418)]
-    [InlineData((HttpStatusCode)999)]
+    [Test]
+    [Arguments(HttpStatusCode.OK)]
+    [Arguments((HttpStatusCode)418)]
+    [Arguments((HttpStatusCode)999)]
     public void Create_Returns_Null_For_Unsupported_Status_Code(HttpStatusCode statusCode)
     {
         // Act
@@ -71,19 +71,19 @@ public class RestExceptionFactoryTests
         result.ShouldBeNull();
     }
 
-    [Theory]
-    [InlineData("409", HttpStatusCode.Conflict)]
-    [InlineData("Conflict", HttpStatusCode.Conflict)]
-    [InlineData("conflict", HttpStatusCode.Conflict)]
-    [InlineData("ConflictRestException", HttpStatusCode.Conflict)]
-    [InlineData("conflictrestexception", HttpStatusCode.Conflict)]
-    [InlineData("BadRequest", HttpStatusCode.BadRequest)]
-    [InlineData("BadRequestRestException", HttpStatusCode.BadRequest)]
-    [InlineData("ContentTooLarge", HttpStatusCode.RequestEntityTooLarge)]
-    [InlineData("RequestEntityTooLarge", HttpStatusCode.RequestEntityTooLarge)]
-    [InlineData("UnprocessableEntity", HttpStatusCode.UnprocessableEntity)]
-    [InlineData("UnprocessableContent", HttpStatusCode.UnprocessableEntity)]
-    [InlineData("500", HttpStatusCode.InternalServerError)]
+    [Test]
+    [Arguments("409", HttpStatusCode.Conflict)]
+    [Arguments("Conflict", HttpStatusCode.Conflict)]
+    [Arguments("conflict", HttpStatusCode.Conflict)]
+    [Arguments("ConflictRestException", HttpStatusCode.Conflict)]
+    [Arguments("conflictrestexception", HttpStatusCode.Conflict)]
+    [Arguments("BadRequest", HttpStatusCode.BadRequest)]
+    [Arguments("BadRequestRestException", HttpStatusCode.BadRequest)]
+    [Arguments("ContentTooLarge", HttpStatusCode.RequestEntityTooLarge)]
+    [Arguments("RequestEntityTooLarge", HttpStatusCode.RequestEntityTooLarge)]
+    [Arguments("UnprocessableEntity", HttpStatusCode.UnprocessableEntity)]
+    [Arguments("UnprocessableContent", HttpStatusCode.UnprocessableEntity)]
+    [Arguments("500", HttpStatusCode.InternalServerError)]
     public void TryResolveStatusCode_Resolves_Supported_Values(string value, HttpStatusCode expected)
     {
         // Act
@@ -94,21 +94,21 @@ public class RestExceptionFactoryTests
         statusCode.ShouldBe(expected);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData("1")]
-    [InlineData("200")]
-    [InlineData("418")]
-    [InlineData("999")]
-    [InlineData("-409")]
-    [InlineData("+409")]
-    [InlineData(" 409")]
-    [InlineData("OK")]
-    [InlineData("NotEmptyValidator")]
-    [InlineData("Conflict,Gone")]
-    [InlineData("RestException")]
+    [Test]
+    [Arguments(null)]
+    [Arguments("")]
+    [Arguments(" ")]
+    [Arguments("1")]
+    [Arguments("200")]
+    [Arguments("418")]
+    [Arguments("999")]
+    [Arguments("-409")]
+    [Arguments("+409")]
+    [Arguments(" 409")]
+    [Arguments("OK")]
+    [Arguments("NotEmptyValidator")]
+    [Arguments("Conflict,Gone")]
+    [Arguments("RestException")]
     public void TryResolveStatusCode_Rejects_Unsupported_Values(string? value)
     {
         // Act

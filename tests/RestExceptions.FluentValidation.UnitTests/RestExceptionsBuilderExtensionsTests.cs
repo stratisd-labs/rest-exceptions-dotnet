@@ -4,7 +4,7 @@ namespace RestExceptions.FluentValidation.UnitTests;
 
 public class RestExceptionsBuilderExtensionsTests
 {
-    [Fact]
+    [Test]
     public void AddFluentValidation_Registers_ValidationExceptionMapper()
     {
         // Arrange

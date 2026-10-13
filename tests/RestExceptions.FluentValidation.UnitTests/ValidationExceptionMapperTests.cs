@@ -7,7 +7,7 @@ public class ValidationExceptionMapperTests
 {
     private readonly ValidationExceptionMapper _mapper = new();
 
-    [Fact]
+    [Test]
     public void Without_Mapper_ValidationException_Is_Internal_Server_Error()
     {
         // Act
@@ -17,7 +17,7 @@ public class ValidationExceptionMapperTests
         result.StatusCode.ShouldBe(HttpStatusCode.InternalServerError);
     }
 
-    [Fact]
+    [Test]
     public void Ignores_Other_Exceptions()
     {
         // Act
@@ -27,19 +27,19 @@ public class ValidationExceptionMapperTests
         result.ShouldBeNull();
     }
 
-    [Theory]
-    [InlineData("409", HttpStatusCode.Conflict)]
-    [InlineData("Conflict", HttpStatusCode.Conflict)]
-    [InlineData("conflict", HttpStatusCode.Conflict)]
-    [InlineData(nameof(ConflictRestException), HttpStatusCode.Conflict)]
-    [InlineData("404", HttpStatusCode.NotFound)]
-    [InlineData("UnprocessableEntity", HttpStatusCode.UnprocessableEntity)]
-    [InlineData("400", HttpStatusCode.BadRequest)]
-    [InlineData("NotEmptyValidator", HttpStatusCode.BadRequest)]
-    [InlineData("1", HttpStatusCode.BadRequest)]
-    [InlineData("418", HttpStatusCode.BadRequest)]
-    [InlineData("999", HttpStatusCode.BadRequest)]
-    [InlineData(null, HttpStatusCode.BadRequest)]
+    [Test]
+    [Arguments("409", HttpStatusCode.Conflict)]
+    [Arguments("Conflict", HttpStatusCode.Conflict)]
+    [Arguments("conflict", HttpStatusCode.Conflict)]
+    [Arguments(nameof(ConflictRestException), HttpStatusCode.Conflict)]
+    [Arguments("404", HttpStatusCode.NotFound)]
+    [Arguments("UnprocessableEntity", HttpStatusCode.UnprocessableEntity)]
+    [Arguments("400", HttpStatusCode.BadRequest)]
+    [Arguments("NotEmptyValidator", HttpStatusCode.BadRequest)]
+    [Arguments("1", HttpStatusCode.BadRequest)]
+    [Arguments("418", HttpStatusCode.BadRequest)]
+    [Arguments("999", HttpStatusCode.BadRequest)]
+    [Arguments(null, HttpStatusCode.BadRequest)]
     public void Resolves_Status_Code_From_Error_Code(string? errorCode, HttpStatusCode expected)
     {
         // Arrange
@@ -53,7 +53,7 @@ public class ValidationExceptionMapperTests
         result.StatusCode.ShouldBe(expected);
     }
 
-    [Fact]
+    [Test]
     public void Same_Status_Code_Across_Failures_Is_Kept()
     {
         // Arrange
@@ -67,7 +67,7 @@ public class ValidationExceptionMapperTests
         result.StatusCode.ShouldBe(HttpStatusCode.Conflict);
     }
 
-    [Fact]
+    [Test]
     public void Mixed_Status_Codes_Are_Bad_Request_With_All_Errors()
     {
         // Arrange
@@ -88,7 +88,7 @@ public class ValidationExceptionMapperTests
         errors["Email"].ShouldBe(["Email is required."]);
     }
 
-    [Fact]
+    [Test]
     public void Only_Error_Severity_Decides_Status_Code()
     {
         // Arrange
@@ -107,7 +107,7 @@ public class ValidationExceptionMapperTests
         Errors(result).Keys.ShouldBe(["Name", "Email"], ignoreOrder: true);
     }
 
-    [Fact]
+    [Test]
     public void Without_Error_Severity_All_Failures_Decide_Status_Code()
     {
         // Arrange
@@ -121,7 +121,7 @@ public class ValidationExceptionMapperTests
         result.StatusCode.ShouldBe(HttpStatusCode.Conflict);
     }
 
-    [Fact]
+    [Test]
     public void Groups_Errors_By_Property_Name()
     {
         // Arrange
@@ -139,7 +139,7 @@ public class ValidationExceptionMapperTests
         Errors(result)["Name"].ShouldBe(["Name is required.", "Name is too short."]);
     }
 
-    [Fact]
+    [Test]
     public void Single_Failure_Message_Is_The_Detail()
     {
         // Arrange
@@ -153,7 +153,7 @@ public class ValidationExceptionMapperTests
         result.Message.ShouldBe("Name is required.");
     }
 
-    [Fact]
+    [Test]
     public void Multiple_Failures_Have_Generic_Detail()
     {
         // Arrange
@@ -167,7 +167,7 @@ public class ValidationExceptionMapperTests
         result.Message.ShouldBe(ValidationExceptionMapper.MultipleFailuresMessage);
     }
 
-    [Fact]
+    [Test]
     public void Without_Failures_Is_Bad_Request_With_Exception_Message()
     {
         // Arrange
@@ -183,7 +183,7 @@ public class ValidationExceptionMapperTests
         result.Extensions.ShouldNotContainKey(ValidationExceptionMapper.ErrorsExtensionKey);
     }
 
-    [Fact]
+    [Test]
     public void Keeps_Original_Exception_Extension()
     {
         // Act
