@@ -1,0 +1,1 @@
+Copyright © [Stratis Dermanoutsos](https://github.com/Stratis-Dermanoutsos) 2025-2026

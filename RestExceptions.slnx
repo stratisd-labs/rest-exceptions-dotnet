@@ -19,6 +19,18 @@
   <Folder Name="/solution/git/workflows/">
     <File Path=".github/workflows/CI.yml" />
   </Folder>
+  <Folder Name="/solution/wiki/">
+    <File Path="wiki/_Footer.md" />
+    <File Path="wiki/Home.md" />
+    <File Path="wiki/1.-Basic-usage.md" />
+    <File Path="wiki/2.-Custom-error-message.md" />
+    <File Path="wiki/3.-Extra-response-properties.md" />
+    <File Path="wiki/4.-Override-ProblemDetails-builder.md" />
+    <File Path="wiki/5.-API-reference.md" />
+    <File Path="wiki/6.-Built-in-exception-mapping.md" />
+    <File Path="wiki/7.-Custom-exception-mappers.md" />
+    <File Path="wiki/8.-FluentValidation.md" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src\RestExceptions\RestExceptions.csproj" />
     <Project Path="src\RestExceptions.FluentValidation\RestExceptions.FluentValidation.csproj" />
