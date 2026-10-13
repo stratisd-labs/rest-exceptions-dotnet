@@ -47,4 +47,15 @@ public class ExceptionExtensionsTests
         result.ShouldBeSameAs(exception);
         mapper.Calls.ShouldBe(0);
     }
+
+    [Fact]
+    public void MapToRestException_Maps_InvalidOperationException_To_Internal_Server_Error()
+    {
+        // Act
+        var result = new InvalidOperationException().MapToRestException();
+
+        // Assert
+        result.ShouldBeOfType<InternalServerErrorRestException>();
+    }
+
 }

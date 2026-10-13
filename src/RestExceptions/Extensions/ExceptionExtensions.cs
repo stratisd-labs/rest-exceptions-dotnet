@@ -71,8 +71,6 @@ public static class ExceptionExtensions
             // 403 - Forbidden
             AccessViolationException
                 or UnauthorizedAccessException => new ForbiddenRestException(exception.Message, extensions),
-            // 405 - Method Not Allowed
-            InvalidOperationException => new MethodNotAllowedRestException(exception.Message, extensions),
             // 501 - Not Implemented
             NotImplementedException
                 or TypeLoadException => new NotImplementedRestException(exception.Message, extensions),
