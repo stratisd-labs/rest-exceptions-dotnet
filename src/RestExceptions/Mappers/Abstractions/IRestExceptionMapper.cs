@@ -3,7 +3,7 @@ namespace RestExceptions;
 /// <summary>
 /// Maps an <see cref="Exception"/> to a <see cref="RestException"/>.
 ///
-/// Mappers run, in registration order, before the built-in mapping of <see cref="ExceptionExtensions.MapToRestException"/>.
+/// Mappers run, in registration order, before the built-in mapping of <see cref="ExceptionExtensions.MapToRestException(Exception)"/>.
 /// The first mapper to return a non-null result wins; if none does, the built-in mapping is used.
 /// <see cref="RestException"/>s thrown directly are never passed to a mapper.
 /// </summary>
