@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace RestExceptions.UnitTests;
 
@@ -94,6 +95,28 @@ public class RestExceptionHandlerTests
         result.ShouldBe(StatusCodes.Status409Conflict);
     }
 
+    [Theory]
+    [InlineData(typeof(Exception), true)]
+    [InlineData(typeof(KeyNotFoundException), false)]
+    public async Task Logs_Only_Server_Errors(Type exceptionType, bool expected)
+    {
+        // Arrange
+        var loggerProvider = new CapturingLoggerProvider();
+        var services = new ServiceCollection()
+            .AddLogging(logging => logging.AddProvider(loggerProvider))
+            .AddRestExceptions()
+            .BuildServiceProvider();
+        var exception = (Exception)Activator.CreateInstance(exceptionType)!;
+
+        // Act
+        await HandleAsync(services, exception);
+
+        // Assert
+        loggerProvider.Logged
+            .Any(entry => entry.Category == typeof(RestExceptionHandler).FullName && entry.Exception == exception)
+            .ShouldBe(expected);
+    }
+
     private static async Task<int> HandleAsync(IServiceProvider services, Exception exception)
     {
         var httpContext = new DefaultHttpContext { RequestServices = services };
@@ -114,4 +137,40 @@ public class RestExceptionHandlerTests
         }
     }
 
+    private sealed class CapturingLoggerProvider : ILoggerProvider
+    {
+        public List<(string Category, Exception? Exception)> Logged { get; } = [];
+
+        public ILogger CreateLogger(string categoryName)
+        {
+            return new CapturingLogger(categoryName, Logged);
+        }
+
+        public void Dispose()
+        {
+        }
+
+        private sealed class CapturingLogger(string category, List<(string, Exception?)> logged) : ILogger
+        {
+            public IDisposable? BeginScope<TState>(TState state) where TState : notnull
+            {
+                return null;
+            }
+
+            public bool IsEnabled(LogLevel logLevel)
+            {
+                return true;
+            }
+
+            public void Log<TState>(
+                LogLevel logLevel,
+                EventId eventId,
+                TState state,
+                Exception? exception,
+                Func<TState, Exception?, string> formatter)
+            {
+                logged.Add((category, exception));
+            }
+        }
+    }
 }
