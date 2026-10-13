@@ -41,8 +41,8 @@ public static class ServiceCollectionExtensions
         services.AddProblemDetails(options => options.CustomizeProblemDetails = context =>
             {
                 context.ProblemDetails.Instance = context.HttpContext.Request.Path;
-                context.ProblemDetails.Extensions.Add("method", context.HttpContext.Request.Method);
-                context.ProblemDetails.Extensions.Add("requestId", context.HttpContext.TraceIdentifier);
+                context.ProblemDetails.Extensions.TryAdd("method", context.HttpContext.Request.Method);
+                context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
                 context.ProblemDetails.Extensions.TryAdd("traceId",
                     context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity.Id);
             });

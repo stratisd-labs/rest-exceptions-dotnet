@@ -73,6 +73,27 @@ public class RestExceptionHandlerTests
         httpContext.Response.StatusCode.ShouldBe(StatusCodes.Status404NotFound);
     }
 
+    [Fact]
+    public async Task Extensions_With_Reserved_Keys_Do_Not_Break_The_Response()
+    {
+        // Arrange
+        var services = new ServiceCollection()
+            .AddLogging()
+            .AddRestExceptions()
+            .BuildServiceProvider();
+        var exception = new ConflictRestException(extensions: new Dictionary<string, object?>
+        {
+            { "method", "custom" },
+            { "requestId", "custom" }
+        });
+
+        // Act
+        var result = await HandleAsync(services, exception);
+
+        // Assert
+        result.ShouldBe(StatusCodes.Status409Conflict);
+    }
+
     private static async Task<int> HandleAsync(IServiceProvider services, Exception exception)
     {
         var httpContext = new DefaultHttpContext { RequestServices = services };
@@ -92,4 +113,5 @@ public class RestExceptionHandlerTests
                 : null;
         }
     }
+
 }
