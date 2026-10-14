@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/stratisd-labs/rest-exceptions-dotnet/workflows/CI/badge.svg)](https://github.com/stratisd-labs/rest-exceptions-dotnet/actions?query=workflow%3ACI)
 
-Extensible Web API middleware that maps all exceptions to standardized [RFC7807](https://www.rfc-editor.org/rfc/rfc7807.html)-compliant HTTP responses.
+Extensible Web API middleware that maps all exceptions to standardized [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html) (Problem Details, formerly [RFC 7807](https://www.rfc-editor.org/rfc/rfc7807.html)) HTTP responses.
 
 ## NuGet Packages
 
