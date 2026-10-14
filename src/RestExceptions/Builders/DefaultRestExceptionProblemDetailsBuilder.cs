@@ -12,7 +12,7 @@ public sealed class DefaultRestExceptionProblemDetailsBuilder : IRestExceptionPr
             Status = (int)restException.StatusCode,
             Title = restException.Title,
             Detail = restException.Message,
-            Type = $"https://www.rfc-editor.org/rfc/rfc9110.html#name-{restException.TypeSuffix}"
+            Type = ProblemTypes.Get(restException.StatusCode)
         };
 
         return problemDetails;
