@@ -19,7 +19,7 @@ You can read the documentation for **RestExceptions** on [GitHub wiki](https://g
 
 ```json
 {
-  "type": "https://www.rfc-editor.org/rfc/rfc9110.html#name-404-not-found",
+  "type": "https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.5",
   "title": "Not Found",
   "status": 404,
   "detail": "Content not found.",
@@ -71,7 +71,7 @@ RuleFor(x => x.Name)
 
 ```json
 {
-  "type": "https://www.rfc-editor.org/rfc/rfc9110.html#name-409-conflict",
+  "type": "https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.10",
   "title": "Conflict",
   "status": 409,
   "detail": "A user named 'taken' already exists.",
