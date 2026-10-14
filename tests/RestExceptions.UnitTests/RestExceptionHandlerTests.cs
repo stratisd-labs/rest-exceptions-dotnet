@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -115,6 +116,41 @@ public class RestExceptionHandlerTests
         loggerProvider.Logged
             .Any(entry => entry.Category == typeof(RestExceptionHandler).FullName && entry.Exception == exception)
             .ShouldBe(expected);
+    }
+
+    [Test]
+    [Arguments("text/html")]
+    [Arguments("application/xml")]
+    public async Task Writes_Problem_Json_When_Accept_Header_Excludes_Json(string accept)
+    {
+        // Arrange
+        var services = new ServiceCollection()
+            .AddLogging()
+            .AddRestExceptions()
+            .BuildServiceProvider();
+        var httpContext = new DefaultHttpContext { RequestServices = services };
+        httpContext.Request.Method = HttpMethods.Get;
+        httpContext.Request.Path = "/users/1";
+        httpContext.Request.Headers.Accept = accept;
+        httpContext.Response.Body = new MemoryStream();
+        var handler = services.GetServices<IExceptionHandler>().OfType<RestExceptionHandler>().Single();
+
+        // Act
+        var handled = await handler.TryHandleAsync(httpContext, new NotFoundRestException());
+
+        // Assert
+        handled.ShouldBeTrue();
+        httpContext.Response.StatusCode.ShouldBe(StatusCodes.Status404NotFound);
+        httpContext.Response.ContentType.ShouldBe("application/problem+json");
+
+        httpContext.Response.Body.Position = 0;
+        using var body = await JsonDocument.ParseAsync(httpContext.Response.Body);
+        var root = body.RootElement;
+        root.GetProperty("type").GetString().ShouldBe(ProblemTypes.Get(HttpStatusCode.NotFound));
+        root.GetProperty("status").GetInt32().ShouldBe(StatusCodes.Status404NotFound);
+        // Applied by the ProblemDetailsOptions customization of AddRestExceptions
+        root.GetProperty("instance").GetString().ShouldBe("/users/1");
+        root.GetProperty("method").GetString().ShouldBe(HttpMethods.Get);
     }
 
     private static async Task<int> HandleAsync(IServiceProvider services, Exception exception)
