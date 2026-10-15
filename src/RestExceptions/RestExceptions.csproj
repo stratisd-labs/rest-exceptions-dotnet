@@ -12,8 +12,8 @@
     <PackageProjectUrl>https://github.com/stratisd-labs/rest-exceptions-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/stratisd-labs/rest-exceptions-dotnet</RepositoryUrl>
 
-    <Description>Extensible Web API middleware that maps all exceptions to standardized RFC7807-compliant HTTP responses.</Description>
-    <PackageTags>open-source http oss rest errors csharp dotnet exceptions problem-details rfc7807</PackageTags>
+    <Description>Extensible Web API middleware that maps all exceptions to standardized RFC 9457 (Problem Details, formerly RFC 7807) HTTP responses.</Description>
+    <PackageTags>open-source http oss rest errors csharp dotnet exceptions problem-details rfc9457 rfc7807</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>* Added IRestExceptionMapper, to map additional exception types, registered through AddRestExceptions(options => options.AddMapper&lt;T&gt;()).
 * Added RestExceptionFactory, to create a RestException from an HttpStatusCode.

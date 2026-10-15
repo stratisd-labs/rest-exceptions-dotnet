@@ -12,8 +12,8 @@
     <PackageProjectUrl>https://github.com/stratisd-labs/rest-exceptions-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/stratisd-labs/rest-exceptions-dotnet</RepositoryUrl>
 
-    <Description>FluentValidation integration for RestExceptions. Maps ValidationException to RFC7807-compliant HTTP responses, picking the status code from each rule's ErrorCode.</Description>
-    <PackageTags>open-source http oss rest errors csharp dotnet exceptions problem-details rfc7807 fluentvalidation validation</PackageTags>
+    <Description>FluentValidation integration for RestExceptions. Maps ValidationException to RFC 9457 (Problem Details) HTTP responses, picking the status code from each rule's ErrorCode.</Description>
+    <PackageTags>open-source http oss rest errors csharp dotnet exceptions problem-details rfc9457 rfc7807 fluentvalidation validation</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>* Initial release. Maps FluentValidation's ValidationException, with the status code taken from ErrorCode.
     </PackageReleaseNotes>
