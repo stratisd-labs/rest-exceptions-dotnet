@@ -8,11 +8,18 @@ All notable changes to **RestExceptions** and **RestExceptions.FluentValidation*
 - `ProblemTypes.Get(statusCode)` returns the `type` URI that the default builder uses, for custom `IRestExceptionProblemDetailsBuilder`s.
 
 ### 🐛 Fixes
-- A request whose `Accept` header didn't allow JSON (e.g. `text/html`) got a 500 error instead of the problem details response. The response is now always written as `application/problem+json`, as [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html) allows.
-- Fixed broken `type` links for 13 status codes:
-  - 423, 424, 428, 429, 431, 451, 506, 507, 508, 510 and 511 now link to the RFC that defines them, instead of RFC 9110, which doesn't.
-  - 407 and 505 linked to RFC 9110 anchors that don't exist.
-  - All `type` links now point to section numbers, e.g. `rfc9110.html#section-15.5.5` instead of `rfc9110.html#name-404-not-found`.
+- A request whose `Accept` header didn't allow JSON (e.g. `text/html`) got no problem details: a 404 became a 500 error, and other status codes had an empty body. The response is now always written as `application/problem+json`, as [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html) allows.
+- Fixed broken `type` links for 13 status codes. See the breaking change below.
+
+### ⚠️ Breaking changes
+- **The `type` of every response changes.** [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html#section-3.1.1) makes `type` the primary identifier of a problem, so clients that compare `type` against a fixed value stop matching after the upgrade.
+  - `type` now links to the numbered section of the RFC that defines the status code, e.g. `https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.5` instead of `https://www.rfc-editor.org/rfc/rfc9110.html#name-404-not-found`. This applies to **all** status codes, including those whose links already worked.
+  - 13 links were broken before: 423, 424, 428, 429, 431, 451, 506, 507, 508, 510 and 511 now link to the RFC that defines them, instead of RFC 9110, which doesn't. 407 and 505 linked to RFC 9110 anchors that don't exist.
+  - A `RestException` with a status code the package doesn't know gets `about:blank`.
+  - To match a problem in a client, compare `status`, or compare `type` against `ProblemTypes.Get(statusCode)`.
+
+### 🗑️ Deprecations
+- `RestException.TypeSuffix` is obsolete, since it produces the broken links. Use `ProblemTypes.Get(restException.StatusCode)` instead.
 
 ## 10.1.0 - 2026-10-13
 
