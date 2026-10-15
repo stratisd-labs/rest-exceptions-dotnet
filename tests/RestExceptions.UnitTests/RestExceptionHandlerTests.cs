@@ -1,12 +1,14 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace RestExceptions.UnitTests;
 
-public class RestExceptionHandlerTests
+public partial class RestExceptionHandlerTests
 {
     [Test]
     public async Task Without_Mappers_Uses_Built_In_Mapping()
@@ -153,6 +155,31 @@ public class RestExceptionHandlerTests
         root.GetProperty("method").GetString().ShouldBe(HttpMethods.Get);
     }
 
+    [Test]
+    public async Task Writes_Problem_Json_With_A_Source_Generated_Only_Resolver()
+    {
+        // Arrange
+        // AddProblemDetails adds its own ProblemDetails resolver to the JsonOptions, which the fallback relies on
+        var services = new ServiceCollection()
+            .AddLogging()
+            .Configure<JsonOptions>(options => options.SerializerOptions.TypeInfoResolver = StringOnlyJsonContext.Default)
+            .AddRestExceptions()
+            .BuildServiceProvider();
+        var httpContext = new DefaultHttpContext { RequestServices = services };
+        httpContext.Request.Headers.Accept = "text/html";
+        httpContext.Response.Body = new MemoryStream();
+        var handler = services.GetServices<IExceptionHandler>().OfType<RestExceptionHandler>().Single();
+
+        // Act
+        var handled = await handler.TryHandleAsync(httpContext, new ConflictRestException());
+
+        // Assert
+        handled.ShouldBeTrue();
+        httpContext.Response.Body.Position = 0;
+        using var body = await JsonDocument.ParseAsync(httpContext.Response.Body);
+        body.RootElement.GetProperty("status").GetInt32().ShouldBe(StatusCodes.Status409Conflict);
+    }
+
     private static async Task<int> HandleAsync(IServiceProvider services, Exception exception)
     {
         var httpContext = new DefaultHttpContext { RequestServices = services };
@@ -172,6 +199,9 @@ public class RestExceptionHandlerTests
                 : null;
         }
     }
+
+    [JsonSerializable(typeof(string))]
+    private sealed partial class StringOnlyJsonContext : JsonSerializerContext;
 
     private sealed class CapturingLoggerProvider : ILoggerProvider
     {

@@ -69,14 +69,16 @@ public class RestExceptionsTests(ApiFactory factory) : ApiTests(factory)
     }
 
     [Test]
-    [Arguments(null)]
-    [Arguments("application/json")]
-    [Arguments("text/html")]
-    [Arguments("application/xml")]
-    public async Task Responds_With_Problem_Json_Regardless_Of_Accept_Header(string? accept)
+    [Arguments(404, null)]
+    [Arguments(404, "application/json")]
+    [Arguments(404, "text/html")]
+    [Arguments(404, "application/xml")]
+    [Arguments(409, "text/html")]
+    [Arguments(500, "text/html")]
+    public async Task Responds_With_Problem_Json_Regardless_Of_Accept_Header(int statusCode, string? accept)
     {
         // Arrange
-        using var request = new HttpRequestMessage(HttpMethod.Get, "error/404");
+        using var request = new HttpRequestMessage(HttpMethod.Get, $"error/{statusCode}");
         if (accept is not null)
         {
             request.Headers.Accept.ParseAdd(accept);
@@ -86,7 +88,7 @@ public class RestExceptionsTests(ApiFactory factory) : ApiTests(factory)
         using var response = await Client.SendAsync(request);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        response.StatusCode.ShouldBe((HttpStatusCode)statusCode);
         response.Content.Headers.ContentType?.MediaType.ShouldBe("application/problem+json");
     }
 
