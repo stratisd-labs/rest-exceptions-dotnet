@@ -64,6 +64,10 @@ public static class ProblemTypes
     /// </summary>
     /// <param name="statusCode">The HTTP status code.</param>
     /// <returns>The URI of the RFC section that defines the status code, or <see cref="AboutBlank"/> for any other status code.</returns>
+    /// <remarks>
+    /// With <see cref="AboutBlank"/>, RFC 9457 expects the title to be the HTTP status phrase.
+    /// For a custom <see cref="RestException"/> with its own title, override the <see cref="IRestExceptionProblemDetailsBuilder"/> to supply its own type.
+    /// </remarks>
     /// <example>
     /// <c>HttpStatusCode.NotFound</c> becomes <c>"https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.5"</c>.
     /// </example>

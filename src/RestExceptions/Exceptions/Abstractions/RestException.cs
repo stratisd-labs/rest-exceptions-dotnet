@@ -8,5 +8,6 @@ public abstract class RestException(string message, Dictionary<string, object?>?
 
     public Dictionary<string, object?> Extensions { get; } = extensions ?? [];
 
-    public string TypeSuffix => $"{(int)StatusCode}-{Title.ToKebabCase()}";
+    [Obsolete("Builds RFC 9110 anchors that don't exist for every status code. Use ProblemTypes.Get(StatusCode) instead.")]
+    public string TypeSuffix =>$"{(int)StatusCode}-{Title.ToKebabCase()}";
 }
