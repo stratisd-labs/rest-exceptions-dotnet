@@ -1,11 +1,14 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace RestExceptions.UnitTests;
 
-public class RestExceptionHandlerTests
+public partial class RestExceptionHandlerTests
 {
     [Test]
     public async Task Without_Mappers_Uses_Built_In_Mapping()
@@ -117,6 +120,66 @@ public class RestExceptionHandlerTests
             .ShouldBe(expected);
     }
 
+    [Test]
+    [Arguments("text/html")]
+    [Arguments("application/xml")]
+    public async Task Writes_Problem_Json_When_Accept_Header_Excludes_Json(string accept)
+    {
+        // Arrange
+        var services = new ServiceCollection()
+            .AddLogging()
+            .AddRestExceptions()
+            .BuildServiceProvider();
+        var httpContext = new DefaultHttpContext { RequestServices = services };
+        httpContext.Request.Method = HttpMethods.Get;
+        httpContext.Request.Path = "/users/1";
+        httpContext.Request.Headers.Accept = accept;
+        httpContext.Response.Body = new MemoryStream();
+        var handler = services.GetServices<IExceptionHandler>().OfType<RestExceptionHandler>().Single();
+
+        // Act
+        var handled = await handler.TryHandleAsync(httpContext, new NotFoundRestException());
+
+        // Assert
+        handled.ShouldBeTrue();
+        httpContext.Response.StatusCode.ShouldBe(StatusCodes.Status404NotFound);
+        httpContext.Response.ContentType.ShouldBe("application/problem+json");
+
+        httpContext.Response.Body.Position = 0;
+        using var body = await JsonDocument.ParseAsync(httpContext.Response.Body);
+        var root = body.RootElement;
+        root.GetProperty("type").GetString().ShouldBe(ProblemTypes.Get(HttpStatusCode.NotFound));
+        root.GetProperty("status").GetInt32().ShouldBe(StatusCodes.Status404NotFound);
+        // Applied by the ProblemDetailsOptions customization of AddRestExceptions
+        root.GetProperty("instance").GetString().ShouldBe("/users/1");
+        root.GetProperty("method").GetString().ShouldBe(HttpMethods.Get);
+    }
+
+    [Test]
+    public async Task Writes_Problem_Json_With_A_Source_Generated_Only_Resolver()
+    {
+        // Arrange
+        // AddProblemDetails adds its own ProblemDetails resolver to the JsonOptions, which the fallback relies on
+        var services = new ServiceCollection()
+            .AddLogging()
+            .Configure<JsonOptions>(options => options.SerializerOptions.TypeInfoResolver = StringOnlyJsonContext.Default)
+            .AddRestExceptions()
+            .BuildServiceProvider();
+        var httpContext = new DefaultHttpContext { RequestServices = services };
+        httpContext.Request.Headers.Accept = "text/html";
+        httpContext.Response.Body = new MemoryStream();
+        var handler = services.GetServices<IExceptionHandler>().OfType<RestExceptionHandler>().Single();
+
+        // Act
+        var handled = await handler.TryHandleAsync(httpContext, new ConflictRestException());
+
+        // Assert
+        handled.ShouldBeTrue();
+        httpContext.Response.Body.Position = 0;
+        using var body = await JsonDocument.ParseAsync(httpContext.Response.Body);
+        body.RootElement.GetProperty("status").GetInt32().ShouldBe(StatusCodes.Status409Conflict);
+    }
+
     private static async Task<int> HandleAsync(IServiceProvider services, Exception exception)
     {
         var httpContext = new DefaultHttpContext { RequestServices = services };
@@ -136,6 +199,9 @@ public class RestExceptionHandlerTests
                 : null;
         }
     }
+
+    [JsonSerializable(typeof(string))]
+    private sealed partial class StringOnlyJsonContext : JsonSerializerContext;
 
     private sealed class CapturingLoggerProvider : ILoggerProvider
     {

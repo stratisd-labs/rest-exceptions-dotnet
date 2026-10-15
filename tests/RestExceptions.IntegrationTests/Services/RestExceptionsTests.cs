@@ -1,3 +1,4 @@
+using System.Net;
 using Shouldly;
 
 namespace RestExceptions.IntegrationTests.Services;
@@ -53,5 +54,46 @@ public class RestExceptionsTests(ApiFactory factory) : ApiTests(factory)
 
         // Assert
         result.ShouldBe(expected);
+    }
+
+    [Test]
+    [MethodDataSource(nameof(SupportedStatusCodes))]
+    public async Task Status_Code_To_Problem_Type(int statusCode)
+    {
+        // Act
+        var problemDetails = await GetProblemDetailsAsync("error", statusCode);
+        var result = problemDetails?.Type;
+
+        // Assert
+        result.ShouldBe(ProblemTypes.Get((HttpStatusCode)statusCode));
+    }
+
+    [Test]
+    [Arguments(404, null)]
+    [Arguments(404, "application/json")]
+    [Arguments(404, "text/html")]
+    [Arguments(404, "application/xml")]
+    [Arguments(409, "text/html")]
+    [Arguments(500, "text/html")]
+    public async Task Responds_With_Problem_Json_Regardless_Of_Accept_Header(int statusCode, string? accept)
+    {
+        // Arrange
+        using var request = new HttpRequestMessage(HttpMethod.Get, $"error/{statusCode}");
+        if (accept is not null)
+        {
+            request.Headers.Accept.ParseAdd(accept);
+        }
+
+        // Act
+        using var response = await Client.SendAsync(request);
+
+        // Assert
+        response.StatusCode.ShouldBe((HttpStatusCode)statusCode);
+        response.Content.Headers.ContentType?.MediaType.ShouldBe("application/problem+json");
+    }
+
+    public static IEnumerable<int> SupportedStatusCodes()
+    {
+        return RestExceptionFactory.SupportedStatusCodes.Select(statusCode => (int)statusCode);
     }
 }
